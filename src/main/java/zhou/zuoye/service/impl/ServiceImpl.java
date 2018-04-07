@@ -14,8 +14,8 @@ public class ServiceImpl<T,TD extends Serializable> implements Service<T,TD> {
     JpaRepository<T,Integer> myppRepository;
 
     @Override
-    public void save(T model) {
-        myppRepository.save(model);
+    public  <S extends T> S save(S model) {
+        return  myppRepository.save(model);
     }
     @Override
     public T findById(Integer id) {

@@ -12,13 +12,13 @@ public class User {
     private String name;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String phone;
 
     private String student_code;
 
     @Column(columnDefinition = "INTEGER DEFAULT 0")
-    private Integer userlevel=0; //用户等级 0--user 1--teacher  2--admin
+    private Integer userlevel=0; //用户等级 0--student 1--teacher  2--admin
     @Column(columnDefinition = "INTEGER DEFAULT 1")
     private Integer verify=1;    //审核状态 0--未通过 1--待审核 2--已通过
     @Column(columnDefinition = "INTEGER DEFAULT 1")

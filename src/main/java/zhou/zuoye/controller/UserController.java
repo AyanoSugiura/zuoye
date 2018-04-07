@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
     @Resource
     private UserService userService;
@@ -23,11 +24,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User studentRegister(User user) {
-        userService.save(user);
-        return user;
+    public String userRegister(User user) {
+        User user1=userService.save(user);
+        if(user1==null)
+            return "注册失败";
+        else return "注册成功";
     }
 
+    @PostMapping("/jcphone")
+    public String jcPhone(String phone) {
+        User user = userService.findByPhone(phone);
+        if (user != null)
+            return "该号码已注册";
+        else return "该号码未注册";
+    }
 
     @PostMapping("/save/user")
     public User save(User user) {
