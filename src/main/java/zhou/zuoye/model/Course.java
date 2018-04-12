@@ -1,9 +1,12 @@
 package zhou.zuoye.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="course")
+@JsonIgnoreProperties(value={"teacher"})
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,4 +71,11 @@ public class Course {
     public void setUsable(Integer usable) {
         this.usable = usable;
     }
+
+    public Course(String name, User teacher) {
+        this.name = name;
+        this.teacher = teacher;
+    }
+
+    public Course(){}
 }

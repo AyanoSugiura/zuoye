@@ -88,5 +88,21 @@ public class User {
         this.usable = usable;
     }
 
+    public User(String name, String password, String phone) {
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+    }
 
+    public User(String name, String password, String phone, String student_code, Integer userlevel, Integer verify, Integer usable) {
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+        this.student_code = student_code;
+        this.userlevel = userlevel;
+        this.verify = verify;
+        this.usable = usable;
+    }
+
+    public User(){}
 }

@@ -1,6 +1,7 @@
 package zhou.zuoye.controller;
 
 import org.springframework.web.bind.annotation.*;
+import zhou.zuoye.model.Course;
 import zhou.zuoye.model.User;
 import zhou.zuoye.service.UserService;
 
@@ -14,6 +15,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
+
     @PostMapping("/login")
     public User login(@RequestParam String phone, @RequestParam String password) {
         User user = userService.findByPhone(phone);
@@ -25,10 +27,13 @@ public class UserController {
 
     @PostMapping("/register")
     public String userRegister(User user) {
-        User user1=userService.save(user);
-        if(user1==null)
-            return "注册失败";
-        else return "注册成功";
+        User user0 = userService.findByPhone(user.getPhone());
+        if (user0 == null) {
+            User user1 = userService.save(user);
+            if (user1 == null)
+                return "注册失败";
+            else return "注册成功";
+        }else return "该账号已被注册";
     }
 
     @PostMapping("/jcphone")
@@ -58,7 +63,6 @@ public class UserController {
     }
 
 
-
     @GetMapping("/findall")
     public List<User> findAll() {
         List<User> users = userService.findAll();
@@ -66,8 +70,7 @@ public class UserController {
     }
 
 
-
-    }
+}
 
     /*
 
