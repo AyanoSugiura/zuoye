@@ -26,4 +26,19 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourse,Integer>
     public  List<StudentCourse> findStudentCoursesByCourseAndAndVerify(Course course, Integer verify){
         return  studentCourseRepository.findStudentCoursesByCourseAndAndVerify(course, verify);
     }
+
+    @Override
+    public List<Course> studentCourses(Integer sid){
+        return  studentCourseRepository.studentCourses(sid);
+    }
+
+    @Override
+    public List<StudentCourse> studentCoursesss2(User user){
+        return studentCourseRepository.studentCoursesss2(user);
+    }
+
+    @Override
+    public StudentCourse findByStudentAndCourse(User student,Course course){
+        return studentCourseRepository.findByStudentAndCourse(student,course);
+    }
 }

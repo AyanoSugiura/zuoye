@@ -35,6 +35,7 @@ public class ServiceImpl<T,TD extends Serializable> implements Service<T,TD> {
     public List<T> findAll(Sort var1) {
         return (List<T>)myppRepository.findAll( var1);
     }
+
    /* @Override
     public void save(List models) {
 

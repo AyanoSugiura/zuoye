@@ -26,4 +26,9 @@ public class CourseServiceImpl extends ServiceImpl<Course,Integer> implements Co
         return  courseRepository.findCoursesByTeacher(teacher);
     }
 
+    @Override
+    public Course findCourseByTeacherAndName(User teacher,String name){
+        return courseRepository.findCourseByTeacherAndName(teacher,name);
+    }
+
 }

@@ -6,12 +6,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="course")
-@JsonIgnoreProperties(value={"teacher"})
+//@JsonIgnoreProperties(value={"teacher"})
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
     private String name;
     private String course_code;
 

@@ -51,4 +51,11 @@ public class StudentCourse {
     public void setVerify(Integer verify) {
         this.verify = verify;
     }
+
+    public StudentCourse(User student, Course course) {
+        this.student = student;
+        this.course = course;
+    }
+
+    public StudentCourse(){}
 }

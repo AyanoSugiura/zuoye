@@ -33,10 +33,28 @@ public class CourseController {
         return courses;
     }
 
-    @PostMapping("/findcbyu")
-    public List<Course> TeacherCourse(@RequestParam Integer tid) {
+    @PostMapping("/tchcourses")
+    public List<Course> teacherCourses(@RequestParam Integer tid) {
         User teacher=userService.findById(tid);
+        if (teacher==null||teacher.getPhone()==null) return  null;
         List<Course> courses = courseService.findCoursesByTeacher(teacher);
         return courses;
     }
+
+    @PostMapping("/tchcoursesbp")
+    public List<Course> teacherCourseByphone(@RequestParam String phone) {
+        User teacher=userService.findByPhone(phone);
+        if (teacher==null||teacher.getPhone()==null) return  null;
+        List<Course> courses = courseService.findCoursesByTeacher(teacher);
+        return courses;
+    }
+
+    @PostMapping("/jcnnamebt")
+    public String jcNmaeByTecher(@RequestParam String name, @RequestParam Integer tid) {
+        Course course = courseService.findCourseByTeacherAndName(userService.findById(tid),name);
+        if (course != null&& name.equals(course.getName()))
+            return "该课程名已存在";
+        else return "该课程名可用";
+    }
+
 }
