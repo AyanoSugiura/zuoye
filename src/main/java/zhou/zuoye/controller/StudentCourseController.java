@@ -25,10 +25,11 @@ public class StudentCourseController {
 
     @PostMapping("/apply")
     public String apply(@RequestParam Integer sid, @RequestParam Integer cid) {
+        System.out.println("sid： "+sid+" cid: "+cid);
         User student = userService.findById(sid);
         Course course= courseService.findById(cid);
         StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(student,course);
-        if (studentCourse !=null||studentCourse.getCourse().getName()!=null) return "你已经选了该门课";
+        if (studentCourse !=null) return "你已经选了该门课";
         StudentCourse studentCourse1 = new StudentCourse(student,course);
         StudentCourse studentCourse2 = studentCourseService.save(studentCourse1);
         if(studentCourse2 !=null)

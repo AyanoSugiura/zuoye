@@ -10,13 +10,17 @@ public class Tassk {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @ManyToOne
+    @JoinColumn(name = "cid")
+    private Course course;
+
     @Column(nullable = false)
     private String title;
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "cid")
-    private Course course;
+    private String files_links;
+
+    private String files_names;
 
     private DateTimeLiteralExpression.DateTime time;
 
