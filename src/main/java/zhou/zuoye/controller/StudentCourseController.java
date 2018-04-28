@@ -42,8 +42,7 @@ public class StudentCourseController {
         User student=userService.findById(sid);
         if(student==null||student.getPhone()==null) return null;
         List<StudentCourse> studentcourses = studentCourseService.findStudentCoursesByStudentAndVerify(student,1);
-        if(studentcourses==null||studentcourses.get(0)==null) return null;
-        System.out.println(studentcourses.get(0).getCourse().getName());
+        if(studentcourses==null) return null;
         List<Course> courses=new ArrayList<>();
         for (StudentCourse sc:studentcourses) {
             courses.add(sc.getCourse());

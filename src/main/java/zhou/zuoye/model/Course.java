@@ -11,7 +11,6 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false)
     private String name;
     private String course_code;
 
@@ -77,5 +76,8 @@ public class Course {
         this.teacher = teacher;
     }
 
+    public Course( User teacher) {
+        this.teacher = teacher;
+    }
     public Course(){}
 }
