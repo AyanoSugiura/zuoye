@@ -85,8 +85,28 @@ public class Tassk {
         this.usable = usable;
     }
 
+    public String getFiles_links() {
+        return files_links;
+    }
 
+    public void setFiles_links(String files_links) {
+        this.files_links = files_links;
+    }
 
+    public String getFiles_names() {
+        return files_names;
+    }
 
+    public void setFiles_names(String files_names) {
+        this.files_names = files_names;
+    }
 
+    public Tassk(){}
+
+    public Tassk(Course course, String title, String content, String files_links) {
+        this.course = course;
+        this.title = title;
+        this.content = content;
+        this.files_links = files_links;
+    }
 }

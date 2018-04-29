@@ -79,5 +79,10 @@ public class Course {
     public Course( User teacher) {
         this.teacher = teacher;
     }
+
+    public Course(Integer id){
+        this.id=id;
+    }
+
     public Course(){}
 }

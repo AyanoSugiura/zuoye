@@ -13,11 +13,10 @@ public class FilesController {
     @PostMapping("/save")
     public String save( @RequestParam("file") MultipartFile file) {
         try {
-            System.out.println(file.getOriginalFilename());
             file.transferTo(new File("D:\\zhou1\\projects\\zuoyefiles\\" + file.getOriginalFilename()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return  "http://localhost:8080/files/get/"+file.getOriginalFilename();
+        return  "http://localhost:8089/files/get/"+file.getOriginalFilename();
     }
 }
