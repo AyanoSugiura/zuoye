@@ -33,6 +33,8 @@ public class StudentWork {
 
     private String files_links;
 
+    private String pg_files_links;
+
     private String files_names;
 
     public Integer getId() {
@@ -117,6 +119,14 @@ public class StudentWork {
 
     public String getFiles_links() {
         return files_links;
+    }
+
+    public String getPg_files_links() {
+        return pg_files_links;
+    }
+
+    public void setPg_files_links(String pg_files_links) {
+        this.pg_files_links = pg_files_links;
     }
 
     public void setFiles_links(String files_links) {

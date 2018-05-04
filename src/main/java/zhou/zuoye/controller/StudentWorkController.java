@@ -44,4 +44,18 @@ public class StudentWorkController {
         sSub.removeAll(isSub);
         return sSub;
     }
+
+    @PostMapping("/subzy")
+    public String subZy(){
+        return null;
+    }
+
+    @PostMapping("/flielist")
+    public String flieList(@RequestParam Integer stuId, @RequestParam Integer taskId){
+        User student =new User(stuId);
+        Tassk tassk=new Tassk(taskId);
+        StudentWork studentWork= studentWorkService.findStudentWorkByTasskAndStudent(tassk,student);
+        if (studentWork==null) return null;
+        else return studentWork.getFiles_links();
+    }
 }
