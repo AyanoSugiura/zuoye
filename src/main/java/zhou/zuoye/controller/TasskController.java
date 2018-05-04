@@ -3,8 +3,12 @@ package zhou.zuoye.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import zhou.zuoye.model.Course;
+import zhou.zuoye.model.StudentWork;
 import zhou.zuoye.model.Tassk;
+import zhou.zuoye.model.User;
 import zhou.zuoye.service.CourseService;
+import zhou.zuoye.service.StudentCourseService;
+import zhou.zuoye.service.StudentWorkService;
 import zhou.zuoye.service.TasskService;
 
 import javax.annotation.Resource;
@@ -18,6 +22,8 @@ public class TasskController {
     private TasskService tasskService;
     @Resource
     private CourseService courseService;
+    @Resource
+    private StudentWorkService studentWorkService;
 
     @PostMapping("/add")
     public String add(@RequestParam Integer cid,@RequestParam String files_links,@RequestParam String title,@RequestParam String content) {
@@ -33,11 +39,19 @@ public class TasskController {
     }
 
     @PostMapping("/taskbc")
-    public List<Tassk> teacherCourseByphone(@RequestParam Integer cid) {
+    public List<Tassk> teacherTasks(@RequestParam Integer cid ) {
         Course course =new Course(cid);
         List<Tassk> tassks = tasskService.findTassksByCourse(course);
-
         return tassks;
     }
 
+    @PostMapping("/stutasks")
+    public String studentTasks(@RequestParam Integer tasskId, @RequestParam Integer uid ){
+        User student = new User(uid);
+        Tassk tassk= new Tassk(tasskId);
+        StudentWork studentWork = studentWorkService.findStudentWorkByTasskAndStudent(tassk,student);
+        if(studentWork==null) return "未提交";
+        else if(studentWork.getIsPg()==0) return "已批改";
+        else return "未批改";
+    }
 }

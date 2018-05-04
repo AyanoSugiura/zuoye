@@ -13,5 +13,9 @@ public interface StudentWorkRepository extends JpaRepository<StudentWork,Integer
     public List<StudentWork> findStudentWorksByTitle(String title);
     public List<StudentWork> findStudentWorksByTassk(Tassk tassk);
     public List<StudentWork> findStudentWorksByStudent(User student);
+
+    public List<StudentWork> findStudentWorksByTasskAndIsPg(Tassk tassk,Integer isPg);
+
+    public StudentWork findStudentWorkByTasskAndStudent(Tassk tassk,User student);
 }
 

@@ -51,4 +51,6 @@ public class StudentWorkFile {
     public void setIsPg(Integer isPg) {
         this.isPg = isPg;
     }
+
+
 }

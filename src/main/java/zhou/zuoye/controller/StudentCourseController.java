@@ -49,7 +49,15 @@ public class StudentCourseController {
         }
         return courses;
     }
-
+    @PostMapping("/stuisc")
+    public String stuIsC(@RequestParam Integer cid,@RequestParam Integer sid ){
+        User student = userService.findById(sid);
+        Course course= courseService.findCourseById(cid);
+        if(course==null) return "课号错误,请检查";
+        StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(student,course);
+        if (studentCourse !=null) return "你已经选了该门课";
+        else return "你未选该门课";
+    }
     /*@PostMapping("/stucourses2")
     public List<StudentCourse> studentCourses2(@RequestParam Integer sid) {
         System.out.println(sid);

@@ -8,7 +8,6 @@ public class StudentWork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false)
     private String title;
     private String content;
 
@@ -31,6 +30,10 @@ public class StudentWork {
     private String comment;
 
     private String score;
+
+    private String files_links;
+
+    private String files_names;
 
     public Integer getId() {
         return id;
@@ -111,4 +114,26 @@ public class StudentWork {
     public void setScore(String score) {
         this.score = score;
     }
+
+    public String getFiles_links() {
+        return files_links;
+    }
+
+    public void setFiles_links(String files_links) {
+        this.files_links = files_links;
+    }
+
+    public String getFiles_names() {
+        return files_names;
+    }
+
+    public void setFiles_names(String files_names) {
+        this.files_names = files_names;
+    }
+
+    public StudentWork(Integer id) {
+        this.id = id;
+    }
+
+    public StudentWork() { }
 }

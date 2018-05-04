@@ -103,6 +103,10 @@ public class Tassk {
 
     public Tassk(){}
 
+    public Tassk(Integer id){
+        this.id=id;
+    }
+
     public Tassk(Course course, String title, String content, String files_links) {
         this.course = course;
         this.title = title;

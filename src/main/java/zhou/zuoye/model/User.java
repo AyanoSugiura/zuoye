@@ -88,6 +88,10 @@ public class User {
         this.usable = usable;
     }
 
+    public User(Integer id) {
+        this.id = id;
+    }
+
     public User(String name, String password, String phone) {
         this.name = name;
         this.password = password;

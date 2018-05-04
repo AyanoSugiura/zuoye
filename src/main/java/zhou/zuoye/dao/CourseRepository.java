@@ -12,4 +12,5 @@ public interface CourseRepository extends JpaRepository<Course,Integer> {
     public Course findByName(String name);
     public List<Course> findCoursesByTeacher(User teacher);
     public Course findCourseByTeacherAndName(User teacher,String name);
+    public Course findCourseById(Integer id);
 }
