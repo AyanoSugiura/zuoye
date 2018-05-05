@@ -51,7 +51,7 @@ public class TasskController {
         Tassk tassk= new Tassk(tasskId);
         StudentWork studentWork = studentWorkService.findStudentWorkByTasskAndStudent(tassk,student);
         if(studentWork==null) return "未提交";
-        else if(studentWork.getIsPg()==0) return "已批改";
-        else return "未批改";
+        else if(studentWork.getIsPg()==0) return "未批改";
+        else return "已批改";
     }
 }

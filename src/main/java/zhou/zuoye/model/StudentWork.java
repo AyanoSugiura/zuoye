@@ -37,6 +37,9 @@ public class StudentWork {
 
     private String files_names;
 
+    @Transient
+    private String subStatus;
+
     public Integer getId() {
         return id;
     }
@@ -113,6 +116,14 @@ public class StudentWork {
         return score;
     }
 
+    public String getSubStatus() {
+        return subStatus;
+    }
+
+    public void setSubStatus(String subStatus) {
+        this.subStatus = subStatus;
+    }
+
     public void setScore(String score) {
         this.score = score;
     }
@@ -143,6 +154,13 @@ public class StudentWork {
 
     public StudentWork(Integer id) {
         this.id = id;
+    }
+
+    public StudentWork(String content, User student, Tassk tassk, String files_links) {
+        this.content = content;
+        this.student = student;
+        this.tassk = tassk;
+        this.files_links = files_links;
     }
 
     public StudentWork() { }
