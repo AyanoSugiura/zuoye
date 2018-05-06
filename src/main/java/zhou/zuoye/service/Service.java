@@ -12,4 +12,5 @@ public interface Service<T,TD extends Serializable> {
     T findById(Integer id);//通过ID查找
     List<T> findAll();//获取所有
     public List<T> findAll(Sort var1);
+
 }

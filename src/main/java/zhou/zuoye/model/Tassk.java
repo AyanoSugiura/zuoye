@@ -20,6 +20,9 @@ public class Tassk {
 
     private String files_links;
 
+    @Transient
+    private String isSub;
+
     private String files_names;
 
     private DateTimeLiteralExpression.DateTime time;
@@ -97,9 +100,19 @@ public class Tassk {
         return files_names;
     }
 
+    public String getIsSub() {
+        return isSub;
+    }
+
+    public void setIsSub(String isSub) {
+        this.isSub = isSub;
+    }
+
     public void setFiles_names(String files_names) {
         this.files_names = files_names;
     }
+
+
 
     public Tassk(){}
 
