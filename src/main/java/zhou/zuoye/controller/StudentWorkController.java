@@ -92,13 +92,14 @@ public class StudentWorkController {
     }
 
     @PostMapping("/tchpg")
-    public StudentWork tchPg(@RequestParam Integer id, @RequestParam String comment, @RequestParam String score,@RequestParam Integer isPg) {
-        StudentWork studentWork= new StudentWork(id);
+    public List<StudentWork> tchPg(@RequestParam Integer id, @RequestParam String comment, @RequestParam String score, @RequestParam Integer isPg,@RequestParam Integer type,@RequestParam Integer taskId) {
+        StudentWork studentWork = new StudentWork(id);
         StudentWork tStudentWork = studentWorkService.findStudentWorkById(id);
         tStudentWork.setComment(comment);
         tStudentWork.setScore(score);
         tStudentWork.setIsPg(isPg);
-        StudentWork returnStudentWork =studentWorkService.save(tStudentWork);
-        return returnStudentWork;
+        StudentWork returnStudentWork = studentWorkService.save(tStudentWork);
+        List<StudentWork> studentWorks = isPg(taskId,type);
+        return studentWorks;
     }
 }

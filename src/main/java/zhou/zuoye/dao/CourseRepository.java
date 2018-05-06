@@ -1,5 +1,6 @@
 package zhou.zuoye.dao;
 
+import com.github.pagehelper.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import zhou.zuoye.model.Course;
