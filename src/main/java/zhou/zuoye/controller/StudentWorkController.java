@@ -7,6 +7,8 @@ import zhou.zuoye.service.StudentWorkService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -92,14 +94,38 @@ public class StudentWorkController {
     }
 
     @PostMapping("/tchpg")
-    public List<StudentWork> tchPg(@RequestParam Integer id, @RequestParam String comment, @RequestParam String score, @RequestParam Integer isPg,@RequestParam Integer type,@RequestParam Integer taskId) {
+    public List<StudentWork> tchPg(@RequestParam Integer id, @RequestParam String comment, @RequestParam String score, @RequestParam Integer isPg, @RequestParam Integer type, @RequestParam Integer taskId) {
         StudentWork studentWork = new StudentWork(id);
         StudentWork tStudentWork = studentWorkService.findStudentWorkById(id);
         tStudentWork.setComment(comment);
         tStudentWork.setScore(score);
         tStudentWork.setIsPg(isPg);
         StudentWork returnStudentWork = studentWorkService.save(tStudentWork);
-        List<StudentWork> studentWorks = isPg(taskId,type);
+        List<StudentWork> studentWorks = isPg(taskId, type);
         return studentWorks;
     }
+
+    @PostMapping("/chengji")
+    List<StudentWork> chengJi(@RequestParam Integer sid) {
+        User student = new User(sid);
+        List<StudentWork> studentWorks = studentWorkService.findStudentWorksByStudentAndIsPg(student,1);
+        sortZyListByCrsId(studentWorks);
+        return studentWorks;
+    }
+
+    private void sortZyListByCrsId(List<StudentWork> list) {
+        Collections.sort(list, new Comparator<StudentWork>() {
+            @Override
+            public int compare(StudentWork o1, StudentWork o2) {
+                if (o1.getTassk().getCourse().getId() > o2.getTassk().getCourse().getId()) {
+                    return 1;
+                } else if (o1.getTassk().getCourse().getId() < o2.getTassk().getCourse().getId()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+    }
+
 }

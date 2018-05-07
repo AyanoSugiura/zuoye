@@ -46,4 +46,9 @@ public class StudentWorkServiceImpl extends ServiceImpl<StudentWork,Integer> imp
     public StudentWork findStudentWorkById(Integer id){
         return studentWorkRepository.findStudentWorkById(id);
     }
+
+    @Override
+    public List<StudentWork> findStudentWorksByStudentAndIsPg(User student,Integer isPg){
+        return studentWorkRepository.findStudentWorksByStudentAndIsPg(student, isPg);
+    }
 }
