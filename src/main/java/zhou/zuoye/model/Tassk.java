@@ -116,6 +116,10 @@ public class Tassk {
 
     public Tassk(){}
 
+    public Tassk(Course course) {
+        this.course = course;
+    }
+
     public Tassk(Integer id){
         this.id=id;
     }

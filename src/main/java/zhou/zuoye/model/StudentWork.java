@@ -163,5 +163,9 @@ public class StudentWork {
         this.files_links = files_links;
     }
 
+    public StudentWork(String score) {
+        this.score = score;
+    }
+
     public StudentWork() { }
 }

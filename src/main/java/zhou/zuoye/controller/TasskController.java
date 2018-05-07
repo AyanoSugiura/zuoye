@@ -56,6 +56,37 @@ public class TasskController {
         else return "已批改";
     }
 
+    //用于课程统计界面
+    @PostMapping("/tchstatistic")
+    List<TchStatistic> tchStatistic(@RequestParam Integer cid) {
+        Course course = new Course(cid);
+        List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndAndVerify(course, 1);
+        List<Tassk> tassks = tasskService.findTassksByCourse(course);
+
+        TchStatistic tchStatistic;
+        List<TchStatistic> tchStatistics = new ArrayList<>();
+        List<StudentWork> studentWorks;
+
+        StudentWork studentWork;
+
+        for (StudentCourse studentCourse : studentCs) {
+            studentWorks = new ArrayList<>();
+            for (Tassk tassk : tassks) {
+                studentWork = studentWorkService.findStudentWorkByTasskAndStudent(tassk, studentCourse.getStudent());
+                if (studentWork == null) {
+                    studentWork = new StudentWork("0 (缺交)");
+                    studentWorks.add(studentWork);
+                } else if (studentWork.getIsPg() == 0 || studentWork.getScore() == "" || studentWork.getScore() == null) {
+                    studentWork = new StudentWork("0(未批)");
+                    studentWorks.add(studentWork);
+                } else studentWorks.add(studentWork);
+            }
+            tchStatistic = new TchStatistic(studentCourse.getStudent(), studentWorks);
+            tchStatistics.add(tchStatistic);
+        }
+        return tchStatistics;
+    }
+
     @PostMapping("/stunewzy")
     public List<Tassk> stuNewZy(@RequestParam Integer sid) {
         User student = new User(sid);
@@ -66,8 +97,8 @@ public class TasskController {
 
         for (Tassk tassk : tassks) {
             for (StudentCourse studentCourse : studentCourses) {
-                if(tassk.getCourse().getId()==studentCourse.getCourse().getId()){
-                    tassk.setIsSub(studentTasks(tassk.getId(),sid));
+                if (tassk.getCourse().getId() == studentCourse.getCourse().getId()) {
+                    tassk.setIsSub(studentTasks(tassk.getId(), sid));
                     rtTassks.add(tassk);
                     break;
                 }

@@ -18,4 +18,6 @@ public interface StudentWorkService  extends Service<StudentWork,Integer>{
     public StudentWork findStudentWorkById(Integer id);
 
     public List<StudentWork> findStudentWorksByStudentAndIsPg(User student,Integer isPg);
+
+
 }

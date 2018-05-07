@@ -21,5 +21,7 @@ public interface StudentWorkRepository extends JpaRepository<StudentWork,Integer
 
     public StudentWork findStudentWorkById(Integer id);
 
+
+
 }
 
