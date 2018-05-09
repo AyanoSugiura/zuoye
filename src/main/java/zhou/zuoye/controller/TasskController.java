@@ -60,7 +60,7 @@ public class TasskController {
     @PostMapping("/tchstatistic")
     List<TchStatistic> tchStatistic(@RequestParam Integer cid) {
         Course course = new Course(cid);
-        List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndAndVerify(course, 1);
+        List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndVerify(course, 1);
         List<Tassk> tassks = tasskService.findTassksByCourse(course);
 
         TchStatistic tchStatistic;
@@ -107,4 +107,22 @@ public class TasskController {
 
         return tassks;
     }
+
+    @PostMapping("/tchnewtsk")
+    public List<Tassk> tchNewTsk(@RequestParam Integer tid){
+        User teacher =new User(tid);
+        List<Course> courses= courseService.findCoursesByTeacher(teacher);
+        List<Tassk> tassks = tasskService.findAll(Sort.by(Sort.Order.desc("id")));
+        List<Tassk> rtTassks = new ArrayList<>();
+        for (Tassk tassk : tassks) {
+            for (Course course : courses) {
+                if (tassk.getCourse().getId() == course.getId()) {
+                    rtTassks.add(tassk);
+                    break;
+                }
+            }
+        }
+        return rtTassks;
+    }
+
 }

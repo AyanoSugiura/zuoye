@@ -33,7 +33,7 @@ public class StudentWorkController {
         Tassk tassk = new Tassk(taskId);
         Course course = new Course(courseId);
         List<StudentWork> studentWorks = studentWorkService.findStudentWorksByTassk(tassk);
-        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndAndVerify(course, 1);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, 1);
         List<User> isSub = new ArrayList<>();
         List<User> sSub = new ArrayList<>();
         for (StudentCourse xk : studentCourses) {

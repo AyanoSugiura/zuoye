@@ -13,7 +13,7 @@ import java.util.List;
 @Repository("studentCourseRepository")
 public interface StudentCourseRepository extends JpaRepository<StudentCourse,Integer> {
     public List<StudentCourse> findStudentCoursesByStudentAndVerify(User user,Integer verify);
-    public List<StudentCourse> findStudentCoursesByCourseAndAndVerify(Course course,Integer verify);
+    public List<StudentCourse> findStudentCoursesByCourseAndVerify(Course course,Integer verify);
     public StudentCourse findByStudentAndCourse(User student,Course course);
 
     @Query("select kc from Course kc , StudentCourse zy where kc.teacher =:tid and zy.student=:sid and kc.id <> zy.course")

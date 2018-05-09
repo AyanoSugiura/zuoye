@@ -10,7 +10,7 @@ public interface StudentCourseService extends Service<StudentCourse,Integer>{
 
     public List<StudentCourse> findStudentCoursesByStudentAndVerify(User user, Integer verify);
 
-    public  List<StudentCourse> findStudentCoursesByCourseAndAndVerify(Course course, Integer verify);
+    public  List<StudentCourse> findStudentCoursesByCourseAndVerify(Course course, Integer verify);
 
     public StudentCourse findByStudentAndCourse(User student,Course course);
 

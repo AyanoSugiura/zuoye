@@ -37,6 +37,14 @@ public class StudentCourseController {
         else return "申请失败";
     }
 
+    //未审核
+    @PostMapping("/xkv")
+    public List<StudentCourse> stuApplyCourseVerify( @RequestParam Integer cid,@RequestParam Integer verify){
+        Course course = new Course(cid);
+        List<StudentCourse> studentCourses =studentCourseService.findStudentCoursesByCourseAndVerify(course,verify);
+        return studentCourses;
+    }
+
     @PostMapping("/stucourses")
     public List<Course> studentCourses(@RequestParam Integer sid) {
         User student = userService.findById(sid);
@@ -64,7 +72,7 @@ public class StudentCourseController {
     @PostMapping("/member")
     public List<StudentCourse> courseMember(@RequestParam Integer cid) {
         Course course = new Course(cid);
-        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndAndVerify(course, 1);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, 1);
         return studentCourses;
     }
 
