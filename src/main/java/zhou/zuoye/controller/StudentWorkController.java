@@ -2,6 +2,7 @@ package zhou.zuoye.controller;
 
 import org.springframework.web.bind.annotation.*;
 import zhou.zuoye.model.*;
+import zhou.zuoye.model.statistics.PgStatistics;
 import zhou.zuoye.service.StudentCourseService;
 import zhou.zuoye.service.StudentWorkService;
 import zhou.zuoye.service.TasskService;
@@ -33,7 +34,7 @@ public class StudentWorkController {
         Tassk tassk = new Tassk(taskId);
         Course course = new Course(courseId);
         List<StudentWork> studentWorks = studentWorkService.findStudentWorksByTassk(tassk);
-        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, 1);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, 2);
         List<User> isSub = new ArrayList<>();
         List<User> sSub = new ArrayList<>();
         for (StudentCourse xk : studentCourses) {
@@ -46,6 +47,18 @@ public class StudentWorkController {
 
         sSub.removeAll(isSub);
         return sSub;
+    }
+
+    @PostMapping("/pgstatistics")
+    public PgStatistics pgStatisticss(@RequestParam Integer taskId, @RequestParam Integer courseId) {
+        System.out.println(courseId);
+        System.out.println(taskId);
+        System.out.println("——————————————");
+        List<StudentWork> noPgs  =isPg(taskId,0);
+        List<StudentWork> isPgs  =isPg(taskId,1);
+        List<User> unsubs= unSub(taskId,courseId);
+        PgStatistics pgStatistic=new PgStatistics(isPgs.size(),noPgs.size(),unsubs.size());
+        return pgStatistic;
     }
 
     @PostMapping("/subzy")
@@ -107,11 +120,10 @@ public class StudentWorkController {
     }
 
 
-
     @PostMapping("/chengji")
     List<StudentWork> chengJi(@RequestParam Integer sid) {
         User student = new User(sid);
-        List<StudentWork> studentWorks = studentWorkService.findStudentWorksByStudentAndIsPg(student,1);
+        List<StudentWork> studentWorks = studentWorkService.findStudentWorksByStudentAndIsPg(student, 1);
         sortZyListByCrsId(studentWorks);
         return studentWorks;
     }

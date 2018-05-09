@@ -14,8 +14,12 @@ public interface StudentCourseService extends Service<StudentCourse,Integer>{
 
     public StudentCourse findByStudentAndCourse(User student,Course course);
 
-    public List<Course> studentCourses(Integer sid);
+    //public List<Course> studentCourses(Integer sid);
 
-    public List<StudentCourse> studentCoursesss2(User user);
+    public List<StudentCourse> findStudentCoursesByStudent(User student);
+
+    public List<StudentCourse> findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(User student,Integer verify);
+
+    //public List<StudentCourse> studentCoursesss2(User user);
 }
 

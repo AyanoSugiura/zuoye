@@ -1,6 +1,9 @@
-package zhou.zuoye.model;
+package zhou.zuoye.model.statistics;
 
 
+
+import zhou.zuoye.model.StudentWork;
+import zhou.zuoye.model.User;
 
 import java.util.List;
 

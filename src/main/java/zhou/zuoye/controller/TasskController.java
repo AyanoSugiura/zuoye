@@ -2,8 +2,8 @@ package zhou.zuoye.controller;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import zhou.zuoye.model.*;
+import zhou.zuoye.model.statistics.TchStatistic;
 import zhou.zuoye.service.CourseService;
 import zhou.zuoye.service.StudentCourseService;
 import zhou.zuoye.service.StudentWorkService;
@@ -60,14 +60,17 @@ public class TasskController {
     @PostMapping("/tchstatistic")
     List<TchStatistic> tchStatistic(@RequestParam Integer cid) {
         Course course = new Course(cid);
-        List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndVerify(course, 1);
+        List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndVerify(course, 2);
         List<Tassk> tassks = tasskService.findTassksByCourse(course);
+        if(tassks.size()==0)return null;
 
         TchStatistic tchStatistic;
         List<TchStatistic> tchStatistics = new ArrayList<>();
         List<StudentWork> studentWorks;
 
         StudentWork studentWork;
+
+
 
         for (StudentCourse studentCourse : studentCs) {
             studentWorks = new ArrayList<>();
@@ -84,6 +87,7 @@ public class TasskController {
             tchStatistic = new TchStatistic(studentCourse.getStudent(), studentWorks);
             tchStatistics.add(tchStatistic);
         }
+
         return tchStatistics;
     }
 
@@ -91,7 +95,7 @@ public class TasskController {
     public List<Tassk> stuNewZy(@RequestParam Integer sid) {
         User student = new User(sid);
 
-        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByStudentAndVerify(student, 1);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByStudentAndVerify(student, 2);
         List<Tassk> tassks = tasskService.findAll(Sort.by(Sort.Order.desc("id")));
         List<Tassk> rtTassks = new ArrayList<>();
 
@@ -105,7 +109,7 @@ public class TasskController {
             }
         }
 
-        return tassks;
+        return rtTassks;
     }
 
     @PostMapping("/tchnewtsk")

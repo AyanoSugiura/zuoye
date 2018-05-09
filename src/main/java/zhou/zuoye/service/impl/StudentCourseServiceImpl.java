@@ -27,7 +27,7 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourse,Integer>
         return  studentCourseRepository.findStudentCoursesByCourseAndVerify(course, verify);
     }
 
-    @Override
+   /* @Override
     public List<Course> studentCourses(Integer sid){
         return  studentCourseRepository.studentCourses(sid);
     }
@@ -35,10 +35,20 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourse,Integer>
     @Override
     public List<StudentCourse> studentCoursesss2(User user){
         return studentCourseRepository.studentCoursesss2(user);
-    }
+    }*/
 
     @Override
     public StudentCourse findByStudentAndCourse(User student,Course course){
         return studentCourseRepository.findByStudentAndCourse(student,course);
+    }
+
+    @Override
+    public List<StudentCourse> findStudentCoursesByStudent(User student){
+        return  studentCourseRepository.findStudentCoursesByStudent(student);
+    }
+
+    @Override
+    public List<StudentCourse> findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(User student, Integer verify) {
+        return studentCourseRepository.findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(student, verify);
     }
 }

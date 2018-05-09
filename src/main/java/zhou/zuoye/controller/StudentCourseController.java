@@ -37,25 +37,30 @@ public class StudentCourseController {
         else return "申请失败";
     }
 
+    //审核并返回状态
+    @PostMapping("/verify")
+    public List<StudentCourse> verify(@RequestParam Integer sid, @RequestParam Integer cid, @RequestParam Integer rootVerify,@RequestParam Integer toVerify) {
+        User student = new User(sid);
+        Course course = new Course(cid);
+        StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(student, course);
+        studentCourse.setVerify(toVerify);
+        studentCourseService.save(studentCourse);
+        return studentCourseService.findStudentCoursesByCourseAndVerify(course, rootVerify);
+    }
+
     //未审核
     @PostMapping("/xkv")
-    public List<StudentCourse> stuApplyCourseVerify( @RequestParam Integer cid,@RequestParam Integer verify){
+    public List<StudentCourse> stuApplyCourseVerify(@RequestParam Integer cid, @RequestParam Integer verify) {
         Course course = new Course(cid);
-        List<StudentCourse> studentCourses =studentCourseService.findStudentCoursesByCourseAndVerify(course,verify);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, verify);
         return studentCourses;
     }
 
     @PostMapping("/stucourses")
-    public List<Course> studentCourses(@RequestParam Integer sid) {
-        User student = userService.findById(sid);
-        if (student == null || student.getPhone() == null) return null;
-        List<StudentCourse> studentcourses = studentCourseService.findStudentCoursesByStudentAndVerify(student, 1);
-        if (studentcourses == null) return null;
-        List<Course> courses = new ArrayList<>();
-        for (StudentCourse sc : studentcourses) {
-            courses.add(sc.getCourse());
-        }
-        return courses;
+    public List<StudentCourse> studentCourses(@RequestParam Integer sid) {
+        User student = new User(sid);
+        List<StudentCourse> studentcourses = studentCourseService.findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(student,0);
+        return studentcourses;
     }
 
     @PostMapping("/stuisc")
@@ -70,9 +75,9 @@ public class StudentCourseController {
 
     //成员界面用
     @PostMapping("/member")
-    public List<StudentCourse> courseMember(@RequestParam Integer cid) {
+    public List<StudentCourse> courseMember(@RequestParam Integer cid, @RequestParam Integer verify) {
         Course course = new Course(cid);
-        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, 1);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, verify);
         return studentCourses;
     }
 
