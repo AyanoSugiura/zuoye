@@ -21,6 +21,8 @@ public class StudentWorkController {
     private StudentWorkService studentWorkService;
     @Resource
     private StudentCourseService studentCourseService;
+    @Resource
+    private TasskService tasskService;
 
     @PostMapping("/ispg")
     public List<StudentWork> isPg(@RequestParam Integer taskId, @RequestParam Integer isPg) {
@@ -49,17 +51,43 @@ public class StudentWorkController {
         return sSub;
     }
 
+    @PostMapping("/taskbc")
+    public List<Tassk> teacherTasks(@RequestParam Integer cid,@RequestParam Integer uid, @RequestParam Integer uLevel) {
+        Course course = new Course(cid);
+        List<Tassk> tassks = tasskService.findTassksByCourse(course);
+        if (uLevel == 1) {
+            for (Tassk tassk : tassks) {
+                tassk.setPgStatistics(pgStatisticss(tassk.getId(), cid));
+            }
+        } else if (uLevel == 0) {
+            //TasskController tasskController = new TasskController();
+            for (Tassk tassk : tassks) {
+                tassk.setIsSub(studentTask(tassk.getId(),uid));
+            }
+        }
+
+        return tassks;
+    }
+
     @PostMapping("/pgstatistics")
     public PgStatistics pgStatisticss(@RequestParam Integer taskId, @RequestParam Integer courseId) {
-        System.out.println(courseId);
-        System.out.println(taskId);
-        System.out.println("——————————————");
-        List<StudentWork> noPgs  =isPg(taskId,0);
-        List<StudentWork> isPgs  =isPg(taskId,1);
-        List<User> unsubs= unSub(taskId,courseId);
-        PgStatistics pgStatistic=new PgStatistics(isPgs.size(),noPgs.size(),unsubs.size());
+        List<StudentWork> noPgs = isPg(taskId, 0);
+        List<StudentWork> isPgs = isPg(taskId, 1);
+        List<User> unsubs = unSub(taskId, courseId);
+        PgStatistics pgStatistic = new PgStatistics(isPgs.size(), noPgs.size(), unsubs.size());
         return pgStatistic;
     }
+
+    @PostMapping("/stutask")
+    public String studentTask(@RequestParam Integer tasskId, @RequestParam Integer uid) {
+        User student = new User(uid);
+        Tassk tassk = new Tassk(tasskId);
+        StudentWork studentWork = studentWorkService.findStudentWorkByTasskAndStudent(tassk, student);
+        if (studentWork == null) return "未提交";
+        else if (studentWork.getIsPg() == 0) return "未批改";
+        else return "已批改";
+    }
+
 
     @PostMapping("/subzy")
     public StudentWork subZy(@RequestParam Integer stuId, @RequestParam Integer taskId, @RequestParam String content, @RequestParam String files_links) {

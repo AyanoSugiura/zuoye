@@ -1,6 +1,7 @@
 package zhou.zuoye.model;
 
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+import zhou.zuoye.model.statistics.PgStatistics;
 
 import javax.persistence.*;
 
@@ -22,6 +23,8 @@ public class Tassk {
 
     @Transient
     private String isSub;
+    @Transient
+    private PgStatistics pgStatistics  ;
 
     private String files_names;
 
@@ -112,7 +115,13 @@ public class Tassk {
         this.files_names = files_names;
     }
 
+    public PgStatistics getPgStatistics() {
+        return pgStatistics;
+    }
 
+    public void setPgStatistics(PgStatistics pgStatistics) {
+        this.pgStatistics = pgStatistics;
+    }
 
     public Tassk(){}
 
