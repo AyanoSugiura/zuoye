@@ -57,7 +57,11 @@ public class StudentCourse {
         this.course = course;
     }
 
-
+    public StudentCourse(User student, Course course, Integer verify) {
+        this.student = student;
+        this.course = course;
+        this.verify = verify;
+    }
 
     public StudentCourse(){}
 }

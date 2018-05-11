@@ -98,6 +98,11 @@ public class User {
         this.phone = phone;
     }
 
+    public User(String name, String phone) {
+        this.name = name;
+        this.phone = phone;
+    }
+
     public User(String name, String password, String phone, String student_code, Integer userlevel, Integer verify, Integer usable) {
         this.name = name;
         this.password = password;

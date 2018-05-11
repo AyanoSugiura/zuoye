@@ -1,5 +1,7 @@
 package zhou.zuoye.controller;
 
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import zhou.zuoye.model.*;
@@ -70,7 +72,8 @@ public class TasskController {
 
         StudentWork studentWork;
 
-
+        XSSFWorkbook workbook=new XSSFWorkbook();
+        XSSFSheet sheet=workbook.createSheet();
 
         for (StudentCourse studentCourse : studentCs) {
             studentWorks = new ArrayList<>();

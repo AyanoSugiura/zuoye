@@ -94,27 +94,41 @@ public class StudentCourseController {
     public List<StudentCourse> excelAddMember(@RequestParam("file") MultipartFile file, @RequestParam Integer cid) throws IOException {
         System.out.println(file.getOriginalFilename());
         System.out.println(cid);
-        System.out.println(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-        //if ((file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."))) == ".xlsx") {
+
+        Course course = courseService.findCourseById(cid);
+        String flieType = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+
+        User student;
+        StudentCourse studentCourse;
+
+        String phone;
+        String name;
+
+        System.out.println(flieType);
+
+        if (flieType.equals(".xlsx")) {
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
             for (Iterator ite = sheet.rowIterator(); ite.hasNext(); ) {
                 XSSFRow row = (XSSFRow) ite.next();
-                for (Iterator itet=row.cellIterator();itet.hasNext();){
-                    XSSFCell cell =(XSSFCell) itet.next();
-                    System.out.print(cell.toString());
-                    System.out.print("  ");
-                }
-                System.out.println(" ");
-            }
-        //}
-        /* else if ((file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."))) == ".xls") {
+                phone = Integer.toString((int) (row.getCell(0).getNumericCellValue()));
+                name = row.getCell(1).toString();
 
-        }*/
-       /* Course course = new Course(cid);
-        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, verify);
-        return studentCourses;*/
-        return null;
+                student = userService.findByPhone(phone);
+                if (student == null) {
+                    student = new User(name, "123456", phone);
+                    student = userService.save(student);
+                }
+                if (studentCourseService.findByStudentAndCourse(student,course)==null) {
+                    studentCourse = new StudentCourse(student, course, 2);
+                    studentCourseService.save(studentCourse);
+                }
+            }
+        } else if (flieType.equals(".xls")) {
+
+        }
+
+        return courseMember(cid, 2);
     }
     /*@PostMapping("/stucourses2")
     public List<StudentCourse> studentCourses2(@RequestParam Integer sid) {
