@@ -34,6 +34,8 @@ public class TasskController {
     @Resource
     private StudentWorkService studentWorkService;
 
+
+
     @PostMapping("/add")
     public String add(@RequestParam Integer cid, @RequestParam String files_links, @RequestParam String title, @RequestParam String content) {
         Tassk tassk = new Tassk(courseService.findById(cid), title, content, files_links);
@@ -78,7 +80,7 @@ public class TasskController {
 
         StudentWork studentWork;
 
-        File file=new File("D:\\zhou1\\projects\\zuoyefiles\\output\\tchstatistic\\tchstatistic.xlsx");
+        File file = new File("D:\\zhou1\\projects\\zuoyefiles\\output\\tchstatistic\\tchstatistic.xlsx");
         if (!file.exists()) {   //文件不存在则创建文件，先创建目录
             File dir = new File(file.getParent());
             dir.mkdirs();
@@ -136,7 +138,8 @@ public class TasskController {
             e.printStackTrace();
         }
 
-        if(tchStatistics.size()!=0)tchStatistics.get(0).setExcelLink("http://localhost:8089/files/getstatistic/tchstatistic.xlsx");
+        if (tchStatistics.size() != 0)
+            tchStatistics.get(0).setExcelLink("http://localhost:8089/files/getstatistic/tchstatistic.xlsx");
 
         return tchStatistics;
     }

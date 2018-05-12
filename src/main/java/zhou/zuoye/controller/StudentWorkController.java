@@ -156,6 +156,25 @@ public class StudentWorkController {
         return studentWorks;
     }
 
+
+    //应放在Task控制的。妥协处理
+    @PostMapping("/taskalter")
+    public Tassk alter(@RequestParam Integer cid,@RequestParam Integer id, @RequestParam String title, @RequestParam String content, @RequestParam String files_links) {
+        System.out.println(cid);
+        System.out.println(id);
+        System.out.println(title);
+        System.out.println(content);
+        System.out.println(files_links);
+        Tassk tassk = tasskService.findTasskById(id);
+        tassk.setTitle(title);
+        tassk.setContent(content);
+        tassk.setFiles_links(files_links);
+        Tassk rtTassk = tasskService.save(tassk);
+        rtTassk.setPgStatistics(pgStatisticss(tassk.getId(), cid));
+        return rtTassk;
+    }
+
+
     private void sortZyListByCrsId(List<StudentWork> list) {
         Collections.sort(list, new Comparator<StudentWork>() {
             @Override

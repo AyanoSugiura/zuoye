@@ -11,4 +11,5 @@ public interface TasskService  extends Service<Tassk,Integer>{
     public List<Tassk> findTassksByTitle(String title);
     public List<Tassk> findTassksByCourse(Course course);
     public List<Tassk> findTassksByCourseOrderByIdDesc(Course course);
+    public Tassk findTasskById(Integer id);
 }

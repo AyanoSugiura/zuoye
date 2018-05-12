@@ -16,7 +16,7 @@ public interface TasskRepository extends JpaRepository<Tassk,Integer> {
     public List<Tassk> findTassksByTitle(String title);
     public List<Tassk> findTassksByCourse(Course course);
     public List<Tassk> findTassksByCourseOrderByIdDesc(Course course);
-
+    public Tassk findTasskById(Integer id);
 
 
 
