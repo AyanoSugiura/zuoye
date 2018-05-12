@@ -26,4 +26,10 @@ public class TasskServiceImpl extends ServiceImpl<Tassk,Integer> implements Tass
         return tasskRepository.findTassksByCourse(course);
     }
 
+    @Override
+    public List<Tassk> findTassksByCourseOrderByIdDesc(Course course) {
+        return tasskRepository.findTassksByCourseOrderByIdDesc(course);
+    }
+
+
 }

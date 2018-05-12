@@ -43,4 +43,20 @@ public class FilesController {
                 // .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new FileSystemResource(file));
     }
+
+    @GetMapping("/getstatistic/{filename:.+}")
+    public ResponseEntity excelStatistic( @PathVariable String filename) throws UnsupportedEncodingException {
+        File file = new File("D:\\zhou1\\projects\\zuoyefiles\\output\\tchstatistic\\" + filename);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8.toString()));
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentLength(file.length())
+                // .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(new FileSystemResource(file));
+    }
 }

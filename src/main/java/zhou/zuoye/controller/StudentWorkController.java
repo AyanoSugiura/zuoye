@@ -54,7 +54,7 @@ public class StudentWorkController {
     @PostMapping("/taskbc")
     public List<Tassk> teacherTasks(@RequestParam Integer cid,@RequestParam Integer uid, @RequestParam Integer uLevel) {
         Course course = new Course(cid);
-        List<Tassk> tassks = tasskService.findTassksByCourse(course);
+        List<Tassk> tassks = tasskService.findTassksByCourseOrderByIdDesc(course);
         if (uLevel == 1) {
             for (Tassk tassk : tassks) {
                 tassk.setPgStatistics(pgStatisticss(tassk.getId(), cid));

@@ -1,5 +1,7 @@
 package zhou.zuoye.controller;
 
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,10 @@ import zhou.zuoye.service.StudentWorkService;
 import zhou.zuoye.service.TasskService;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +70,7 @@ public class TasskController {
         Course course = new Course(cid);
         List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndVerify(course, 2);
         List<Tassk> tassks = tasskService.findTassksByCourse(course);
-        if(tassks.size()==0)return null;
+        if (tassks.size() == 0) return null;
 
         TchStatistic tchStatistic;
         List<TchStatistic> tchStatistics = new ArrayList<>();
@@ -72,24 +78,65 @@ public class TasskController {
 
         StudentWork studentWork;
 
-        XSSFWorkbook workbook=new XSSFWorkbook();
-        XSSFSheet sheet=workbook.createSheet();
+        File file=new File("D:\\zhou1\\projects\\zuoyefiles\\output\\tchstatistic\\tchstatistic.xlsx");
+        if (!file.exists()) {   //文件不存在则创建文件，先创建目录
+            File dir = new File(file.getParent());
+            dir.mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet();
+        int i = 0;
 
         for (StudentCourse studentCourse : studentCs) {
+            int j = 2;
+            XSSFRow row = sheet.createRow(i);
             studentWorks = new ArrayList<>();
+
+            XSSFCell cellNub = row.createCell(0);
+            XSSFCell cellName = row.createCell(1);
+            cellNub.setCellValue(studentCourse.getStudent().getId());
+            cellName.setCellValue(studentCourse.getStudent().getName());
+
             for (Tassk tassk : tassks) {
+                XSSFCell cell = row.createCell(j);
                 studentWork = studentWorkService.findStudentWorkByTasskAndStudent(tassk, studentCourse.getStudent());
                 if (studentWork == null) {
                     studentWork = new StudentWork("0 (缺交)");
                     studentWorks.add(studentWork);
+                    cell.setCellValue("0 (缺交)");
                 } else if (studentWork.getIsPg() == 0 || studentWork.getScore() == "" || studentWork.getScore() == null) {
                     studentWork = new StudentWork("0(未批)");
                     studentWorks.add(studentWork);
-                } else studentWorks.add(studentWork);
+                    cell.setCellValue("0 (未批)");
+                } else {
+                    studentWorks.add(studentWork);
+                    cell.setCellValue(studentWork.getScore());
+                }
+                j = j + 1;
             }
             tchStatistic = new TchStatistic(studentCourse.getStudent(), studentWorks);
             tchStatistics.add(tchStatistic);
+            i = i + 1;
         }
+
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(file);
+            workbook.write(fileOut);
+            fileOut.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(tchStatistics.size()!=0)tchStatistics.get(0).setExcelLink("http://localhost:8089/files/getstatistic/tchstatistic.xlsx");
 
         return tchStatistics;
     }
@@ -116,9 +163,9 @@ public class TasskController {
     }
 
     @PostMapping("/tchnewtsk")
-    public List<Tassk> tchNewTsk(@RequestParam Integer tid){
-        User teacher =new User(tid);
-        List<Course> courses= courseService.findCoursesByTeacher(teacher);
+    public List<Tassk> tchNewTsk(@RequestParam Integer tid) {
+        User teacher = new User(tid);
+        List<Course> courses = courseService.findCoursesByTeacher(teacher);
         List<Tassk> tassks = tasskService.findAll(Sort.by(Sort.Order.desc("id")));
         List<Tassk> rtTassks = new ArrayList<>();
         for (Tassk tassk : tassks) {

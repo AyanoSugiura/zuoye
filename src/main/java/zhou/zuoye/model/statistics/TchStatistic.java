@@ -10,6 +10,7 @@ import java.util.List;
 public class TchStatistic {
     private User student;
     private List<StudentWork> score;
+    private String excelLink;
 
     public TchStatistic(){}
 
@@ -36,6 +37,14 @@ public class TchStatistic {
 
     public List<StudentWork> getScore() {
         return score;
+    }
+
+    public String getExcelLink() {
+        return excelLink;
+    }
+
+    public void setExcelLink(String excelLink) {
+        this.excelLink = excelLink;
     }
 
     public void setScore(List<StudentWork> score) {
