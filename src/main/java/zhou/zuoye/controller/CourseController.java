@@ -63,4 +63,12 @@ public class CourseController {
     public Course findCourse(@RequestParam Integer cid) {
         return courseService.findCourseById(cid);
     }
+
+    //成员界面用
+    @PostMapping("/altername")
+    public Course alterName(@RequestParam Integer cid, @RequestParam String name) {
+        Course course=courseService.findCourseById(cid);
+        course.setName(name);
+        return courseService.save(course);
+    }
 }
