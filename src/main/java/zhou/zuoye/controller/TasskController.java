@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import zhou.zuoye.model.*;
+import zhou.zuoye.model.statistics.PgStatistics;
 import zhou.zuoye.model.statistics.TchStatistic;
 import zhou.zuoye.service.CourseService;
 import zhou.zuoye.service.StudentCourseService;
@@ -161,7 +162,6 @@ public class TasskController {
                 }
             }
         }
-
         return rtTassks;
     }
 
@@ -171,15 +171,58 @@ public class TasskController {
         List<Course> courses = courseService.findCoursesByTeacher(teacher);
         List<Tassk> tassks = tasskService.findAll(Sort.by(Sort.Order.desc("id")));
         List<Tassk> rtTassks = new ArrayList<>();
+
         for (Tassk tassk : tassks) {
             for (Course course : courses) {
                 if (tassk.getCourse().getId() == course.getId()) {
+                    tassk.setPgStatistics(pgStatisticss(tassk.getId(),tassk.getCourse().getId()));
                     rtTassks.add(tassk);
                     break;
                 }
             }
         }
         return rtTassks;
+    }
+
+
+
+
+
+
+    @PostMapping("/ispg")
+    public List<StudentWork> isPg(@RequestParam Integer taskId, @RequestParam Integer isPg) {
+        Tassk tassk = new Tassk(taskId);
+        List<StudentWork> studentWorks = studentWorkService.findStudentWorksByTasskAndIsPg(tassk, isPg);
+        return studentWorks;
+    }
+
+    @PostMapping("/unsub")
+    public List<User> unSub(@RequestParam Integer taskId, @RequestParam Integer courseId) {
+        Tassk tassk = new Tassk(taskId);
+        Course course = new Course(courseId);
+        List<StudentWork> studentWorks = studentWorkService.findStudentWorksByTassk(tassk);
+        List<StudentCourse> studentCourses = studentCourseService.findStudentCoursesByCourseAndVerify(course, 2);
+        List<User> isSub = new ArrayList<>();
+        List<User> sSub = new ArrayList<>();
+        for (StudentCourse xk : studentCourses) {
+            sSub.add(xk.getStudent());
+        }
+
+        for (StudentWork zy : studentWorks) {
+            isSub.add(zy.getStudent());
+        }
+
+        sSub.removeAll(isSub);
+        return sSub;
+    }
+
+    @PostMapping("/pgstatistics")
+    public PgStatistics pgStatisticss(@RequestParam Integer taskId, @RequestParam Integer courseId) {
+        List<StudentWork> noPgs = isPg(taskId, 0);
+        List<StudentWork> isPgs = isPg(taskId, 1);
+        List<User> unsubs = unSub(taskId, courseId);
+        PgStatistics pgStatistic = new PgStatistics(isPgs.size(), noPgs.size(), unsubs.size());
+        return pgStatistic;
     }
 
 }
