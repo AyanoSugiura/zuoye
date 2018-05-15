@@ -36,7 +36,6 @@ public class TasskController {
     private StudentWorkService studentWorkService;
 
 
-
     @PostMapping("/add")
     public String add(@RequestParam Integer cid, @RequestParam String files_links, @RequestParam String title, @RequestParam String content) {
         Tassk tassk = new Tassk(courseService.findById(cid), title, content, files_links);
@@ -71,6 +70,7 @@ public class TasskController {
     @PostMapping("/tchstatistic")
     List<TchStatistic> tchStatistic(@RequestParam Integer cid) {
         Course course = new Course(cid);
+
         List<StudentCourse> studentCs = studentCourseService.findStudentCoursesByCourseAndVerify(course, 2);
         List<Tassk> tassks = tasskService.findTassksByCourse(course);
         if (tassks.size() == 0) return null;
@@ -78,6 +78,9 @@ public class TasskController {
         TchStatistic tchStatistic;
         List<TchStatistic> tchStatistics = new ArrayList<>();
         List<StudentWork> studentWorks;
+        double stuAvrg = 0;
+        List<Double> stuAvrgs = new ArrayList<>();
+        String[] stdc = courseService.findCourseById(cid).getSelectscr().split("\\|");
 
         StudentWork studentWork;
 
@@ -94,12 +97,16 @@ public class TasskController {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet();
+
+        List<XSSFRow> rows = new ArrayList<>();
         int i = 0;
+        int j = 2;
 
         for (StudentCourse studentCourse : studentCs) {
-            int j = 2;
+            j = 2;
             XSSFRow row = sheet.createRow(i);
             studentWorks = new ArrayList<>();
+
 
             XSSFCell cellNub = row.createCell(0);
             XSSFCell cellName = row.createCell(1);
@@ -109,6 +116,7 @@ public class TasskController {
             for (Tassk tassk : tassks) {
                 XSSFCell cell = row.createCell(j);
                 studentWork = studentWorkService.findStudentWorkByTasskAndStudent(tassk, studentCourse.getStudent());
+
                 if (studentWork == null) {
                     studentWork = new StudentWork("0 (缺交)");
                     studentWorks.add(studentWork);
@@ -118,14 +126,61 @@ public class TasskController {
                     studentWorks.add(studentWork);
                     cell.setCellValue("0 (未批)");
                 } else {
+                    String score = studentWork.getScore();
                     studentWorks.add(studentWork);
                     cell.setCellValue(studentWork.getScore());
+                    switch (score) {
+                        case "A+":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[0]);
+                            break;
+                        case "A":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[1]);
+                            break;
+                        case "B+":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[2]);
+                            break;
+                        case "B":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[3]);
+                            break;
+                        case "C+":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[4]);
+                            break;
+                        case "C":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[5]);
+                            break;
+                        case "D+":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[6]);
+                            break;
+                        case "D":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[7]);
+                            break;
+                        case "E":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[8]);
+                            break;
+                        case "阅":
+                            stuAvrg = stuAvrg + Integer.parseInt(stdc[9]);
+                            break;
+                    }
                 }
                 j = j + 1;
             }
-            tchStatistic = new TchStatistic(studentCourse.getStudent(), studentWorks);
+            double stuav = stuAvrg / (tassks.size());
+
+            stuAvrgs.add(stuav);
+            stuAvrg = 0;
+            tchStatistic = new TchStatistic(studentCourse.getStudent(), studentWorks, stuav);
             tchStatistics.add(tchStatistic);
             i = i + 1;
+            rows.add(row);
+        }
+
+
+        int lll = 0;
+        for (Double sA : stuAvrgs) {
+            if (lll < i) {
+                rows.get(lll).createCell(j).setCellValue(sA);
+                lll = lll + 1;
+            }
         }
 
 
@@ -175,7 +230,7 @@ public class TasskController {
         for (Tassk tassk : tassks) {
             for (Course course : courses) {
                 if (tassk.getCourse().getId() == course.getId()) {
-                    tassk.setPgStatistics(pgStatisticss(tassk.getId(),tassk.getCourse().getId()));
+                    tassk.setPgStatistics(pgStatisticss(tassk.getId(), tassk.getCourse().getId()));
                     rtTassks.add(tassk);
                     break;
                 }
@@ -183,10 +238,6 @@ public class TasskController {
         }
         return rtTassks;
     }
-
-
-
-
 
 
     @PostMapping("/ispg")

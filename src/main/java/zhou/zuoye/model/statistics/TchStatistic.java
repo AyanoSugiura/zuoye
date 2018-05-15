@@ -11,6 +11,7 @@ public class TchStatistic {
     private User student;
     private List<StudentWork> score;
     private String excelLink;
+    private Double stuAv;
 
     public TchStatistic(){}
 
@@ -25,6 +26,12 @@ public class TchStatistic {
     public TchStatistic(User student, List<StudentWork> score) {
         this.student = student;
         this.score = score;
+    }
+
+    public TchStatistic(User student, List<StudentWork> score, Double stuAv) {
+        this.student = student;
+        this.score = score;
+        this.stuAv = stuAv;
     }
 
     public User getStudent() {
@@ -49,5 +56,13 @@ public class TchStatistic {
 
     public void setScore(List<StudentWork> score) {
         this.score = score;
+    }
+
+    public Double getStuAv() {
+        return stuAv;
+    }
+
+    public void setStuAv(Double stuAv) {
+        this.stuAv = stuAv;
     }
 }
