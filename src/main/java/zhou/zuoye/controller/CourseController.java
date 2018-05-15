@@ -67,8 +67,16 @@ public class CourseController {
     //成员界面用
     @PostMapping("/altername")
     public Course alterName(@RequestParam Integer cid, @RequestParam String name) {
-        Course course=courseService.findCourseById(cid);
+        Course course = courseService.findCourseById(cid);
         course.setName(name);
+        return courseService.save(course);
+    }
+
+    //课程设置界面评分改百分制用
+    @PostMapping("/alterselect")
+    public Course alterSelectscr(@RequestParam Integer cid, @RequestParam String selectscr) {
+        Course course = courseService.findCourseById(cid);
+        course.setSelectscr(selectscr);
         return courseService.save(course);
     }
 }

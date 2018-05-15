@@ -1,6 +1,7 @@
 package zhou.zuoye.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -13,6 +14,8 @@ public class Course {
     private Integer id;
     private String name;
     private String course_code;
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT '95|90|85|80|75|70|65|60|50|80' ")
+    private String selectscr="95|90|85|80|75|70|65|60|50|80";
 
     @ManyToOne
     @JoinColumn(name = "tid")
@@ -71,12 +74,21 @@ public class Course {
         this.usable = usable;
     }
 
+    public String getSelectscr() {
+        return selectscr;
+    }
+    public void setSelectscr(String selectscr) {
+        this.selectscr = selectscr;
+    }
+
     public Course(String name, User teacher) {
         this.name = name;
         this.teacher = teacher;
     }
 
-    public Course( User teacher) {
+
+
+    public Course(User teacher) {
         this.teacher = teacher;
     }
 
