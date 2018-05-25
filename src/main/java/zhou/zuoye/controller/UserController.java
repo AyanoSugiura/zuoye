@@ -33,7 +33,7 @@ public class UserController {
             if (user1 == null)
                 return "注册失败";
             else return "注册成功";
-        }else return "该账号已被注册";
+        } else return "该账号已被注册";
     }
 
     @PostMapping("/jcphone")
@@ -69,7 +69,32 @@ public class UserController {
         return users;
     }
 
+    @PostMapping("/usermsg")
+    public User getUserById(@RequestParam Integer id) {
+        User user = userService.findUserById(id);
+        System.out.println(user.getPhone());
+        return user;
+    }
 
+    @PostMapping("/altermsg")
+    public User alterMsg(@RequestParam Integer uid, @RequestParam String name, @RequestParam String phone) {
+        User user = userService.findUserById(uid);
+        user.setName(name);
+        user.setPhone(phone);
+        user = userService.save(user);
+        return user;
+    }
+
+    @PostMapping("/alterpsw")
+    public String alterPsw(@RequestParam Integer uid, @RequestParam String password, @RequestParam String newpsw) {
+        User user = userService.findUserById(uid);
+        if (password.equals(user.getPassword())){
+            user.setPassword(newpsw);
+            user=userService.save(user);
+            if (user!=null) return "密码更改成功";
+            else return "密码更改失败";
+        }else return "当前密码错误";
+    }
 }
 
     /*

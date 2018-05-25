@@ -1,9 +1,12 @@
 package zhou.zuoye.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="user")
+@JsonIgnoreProperties(value = { "password"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

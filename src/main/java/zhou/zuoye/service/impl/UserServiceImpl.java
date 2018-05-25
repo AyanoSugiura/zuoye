@@ -24,4 +24,9 @@ public class UserServiceImpl extends ServiceImpl<User,Integer> implements UserSe
     public User findByPhone(String phone){
         return userRepository.findByPhone(phone);
     }
+
+    @Override
+    public User findUserById(Integer id) {
+        return userRepository.findUserById(id);
+    }
 }
