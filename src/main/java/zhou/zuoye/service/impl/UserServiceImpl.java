@@ -29,4 +29,16 @@ public class UserServiceImpl extends ServiceImpl<User,Integer> implements UserSe
     public User findUserById(Integer id) {
         return userRepository.findUserById(id);
     }
+
+    @Override
+    public Integer tchVerifyStatusCount(Integer verify) {
+        return userRepository.tchVerifyStatusCount(verify);
+    }
+
+    @Override
+    public List<User> tchVerifyStatusPages(Integer verify, Integer start, Integer page) {
+        return userRepository.tchVerifyStatusPages(verify, start, page);
+    }
+
+
 }
