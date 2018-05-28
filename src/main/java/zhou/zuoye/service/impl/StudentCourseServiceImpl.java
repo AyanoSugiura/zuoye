@@ -51,4 +51,20 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourse,Integer>
     public List<StudentCourse> findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(User student, Integer verify) {
         return studentCourseRepository.findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(student, verify);
     }
+
+    @Override
+    public Integer CourseMemberVerifyCount(Integer cid, Integer verify) {
+        return studentCourseRepository.CourseMemberVerifyCount(cid, verify);
+    }
+
+    @Override
+    public List<StudentCourse> CourseMemberVerifyPages(Integer cid, Integer verify, Integer start, Integer page) {
+        return studentCourseRepository.CourseMemberVerifyPages(cid, verify, start, page);
+    }
+
+    @Override
+    public Integer deleteAllByStudentAndCourse(User student, Course course) {
+        return studentCourseRepository.deleteAllByStudentAndCourse(student, course);
+    }
+
 }

@@ -51,4 +51,14 @@ public class StudentWorkServiceImpl extends ServiceImpl<StudentWork,Integer> imp
     public List<StudentWork> findStudentWorksByStudentAndIsPg(User student,Integer isPg){
         return studentWorkRepository.findStudentWorksByStudentAndIsPg(student, isPg);
     }
+
+    @Override
+    public Integer deleteAllByStudent(User student) {
+        return studentWorkRepository.deleteAllByStudent(student);
+    }
+
+    @Override
+    public Integer deleteAllByStudentAndCourse(Integer sid, Integer cid) {
+        return studentWorkRepository.deleteAllByStudentAndCourse(sid,cid);
+    }
 }

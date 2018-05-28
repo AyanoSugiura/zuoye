@@ -1,6 +1,9 @@
 package zhou.zuoye.dao;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import zhou.zuoye.model.StudentWork;
 import zhou.zuoye.model.Tassk;
@@ -21,7 +24,12 @@ public interface StudentWorkRepository extends JpaRepository<StudentWork,Integer
 
     public StudentWork findStudentWorkById(Integer id);
 
+    public Integer deleteAllByStudent(User student);
 
+    @Transient
+    @Modifying
+    @Query(value = "DELETE student_work.* from student_work where sid=?1 and student_work.tsk_id in (select tassk.id from tassk where tassk.cid=?2)",nativeQuery=true)
+    public Integer deleteAllByStudentAndCourse(Integer sid,Integer cid);
 
 }
 

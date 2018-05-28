@@ -101,6 +101,13 @@ public class User {
         this.phone = phone;
     }
 
+    public User(String name, String password, String phone, Integer verify) {
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+        this.verify = verify;
+    }
+
     public User(String name, String phone) {
         this.name = name;
         this.phone = phone;

@@ -1,4 +1,4 @@
-package zhou.zuoye.model.statistics;
+package zhou.zuoye.model.statistics.page;
 
 import zhou.zuoye.model.User;
 

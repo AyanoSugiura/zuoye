@@ -20,6 +20,10 @@ public interface StudentCourseService extends Service<StudentCourse,Integer>{
 
     public List<StudentCourse> findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(User student,Integer verify);
 
-    //public List<StudentCourse> studentCoursesss2(User user);
+    public Integer CourseMemberVerifyCount(Integer cid,Integer verify);
+    public List<StudentCourse> CourseMemberVerifyPages(Integer cid,Integer verify,Integer start,Integer page);
+
+    public Integer deleteAllByStudentAndCourse(User student,Course course);
+
 }
 

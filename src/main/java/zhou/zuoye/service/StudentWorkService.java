@@ -19,5 +19,8 @@ public interface StudentWorkService  extends Service<StudentWork,Integer>{
 
     public List<StudentWork> findStudentWorksByStudentAndIsPg(User student,Integer isPg);
 
+    public Integer deleteAllByStudent(User student);
+
+    public Integer deleteAllByStudentAndCourse(Integer sid,Integer cid);
 
 }

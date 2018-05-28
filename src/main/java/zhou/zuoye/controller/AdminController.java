@@ -2,11 +2,10 @@ package zhou.zuoye.controller;
 
 import org.springframework.web.bind.annotation.*;
 import zhou.zuoye.model.User;
-import zhou.zuoye.model.statistics.PageAndUsers;
+import zhou.zuoye.model.statistics.page.PageAndUsers;
 import zhou.zuoye.service.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin")

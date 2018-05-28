@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import zhou.zuoye.model.ConFile;
 import zhou.zuoye.model.StudentWork;
 import zhou.zuoye.model.StudentWorkFile;
+import zhou.zuoye.model.User;
 
 import java.util.List;
 
