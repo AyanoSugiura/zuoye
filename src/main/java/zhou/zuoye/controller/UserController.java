@@ -17,8 +17,12 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public User login(@RequestParam String phone, @RequestParam String password) {
+    public Object login(@RequestParam String phone, @RequestParam String password) {
         User user = userService.findByPhone(phone);
+        if(user==null) return null;
+        if(user.getUsable()==0) return "该账号已停用";
+        if (user.getVerify()==0) return "该账号未通过审核";
+        if(user.getUserlevel()==1&&user.getVerify()==1)return "该教师账号已注册，请等待管理员审核后方可登陆";
         if (user != null && user.getPassword().equals(password)) {
             user.setPassword("");
             return user;

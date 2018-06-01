@@ -125,6 +125,12 @@ public class Tassk {
 
     public Tassk(){}
 
+    public Tassk(Course course, String title, String content) {
+        this.course = course;
+        this.title = title;
+        this.content = content;
+    }
+
     public Tassk(Course course) {
         this.course = course;
     }

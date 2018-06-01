@@ -24,6 +24,13 @@ public class StudentWorkController {
     @Resource
     private TasskService tasskService;
 
+    @PostMapping("/getById")
+    public StudentWork getById(@RequestParam Integer sw_id) {
+        StudentWork studentWork = studentWorkService.findStudentWorkById(sw_id);
+        return studentWork;
+    }
+
+
     @PostMapping("/ispg")
     public List<StudentWork> isPg(@RequestParam Integer taskId, @RequestParam Integer isPg) {
         Tassk tassk = new Tassk(taskId);
@@ -52,7 +59,7 @@ public class StudentWorkController {
     }
 
     @PostMapping("/taskbc")
-    public List<Tassk> teacherTasks(@RequestParam Integer cid,@RequestParam Integer uid, @RequestParam Integer uLevel) {
+    public List<Tassk> teacherTasks(@RequestParam Integer cid, @RequestParam Integer uid, @RequestParam Integer uLevel) {
         Course course = new Course(cid);
         List<Tassk> tassks = tasskService.findTassksByCourseOrderByIdDesc(course);
         if (uLevel == 1) {
@@ -62,7 +69,7 @@ public class StudentWorkController {
         } else if (uLevel == 0) {
             //TasskController tasskController = new TasskController();
             for (Tassk tassk : tassks) {
-                tassk.setIsSub(studentTask(tassk.getId(),uid));
+                tassk.setIsSub(studentTask(tassk.getId(), uid));
             }
         }
 
@@ -147,6 +154,17 @@ public class StudentWorkController {
         return studentWorks;
     }
 
+    @PostMapping("/tchPgOne")
+    public Object tchPgOne(@RequestParam Integer tid, @RequestParam Integer sw_id, @RequestParam String comment, @RequestParam String score) {
+        StudentWork studentWork = studentWorkService.findStudentWorkById(sw_id);
+        System.out.println(comment);
+        if (studentWork.getTassk().getCourse().getTeacher().getId() != tid) return "你无权批改此作业";
+        studentWork.setComment(comment);
+        studentWork.setScore(score);
+        studentWork.setIsPg(1);
+        StudentWork returnStudentWork = studentWorkService.save(studentWork);
+        return returnStudentWork;
+    }
 
     @PostMapping("/chengji")
     List<StudentWork> chengJi(@RequestParam Integer sid) {
@@ -159,7 +177,7 @@ public class StudentWorkController {
 
     //应放在Task控制的。妥协处理
     @PostMapping("/taskalter")
-    public Tassk alter(@RequestParam Integer cid,@RequestParam Integer id, @RequestParam String title, @RequestParam String content, @RequestParam String files_links) {
+    public Tassk alter(@RequestParam Integer cid, @RequestParam Integer id, @RequestParam String title, @RequestParam String content, @RequestParam String files_links) {
         Tassk tassk = tasskService.findTasskById(id);
         tassk.setTitle(title);
         tassk.setContent(content);
@@ -168,9 +186,6 @@ public class StudentWorkController {
         rtTassk.setPgStatistics(pgStatisticss(tassk.getId(), cid));
         return rtTassk;
     }
-
-
-
 
 
     private void sortZyListByCrsId(List<StudentWork> list) {

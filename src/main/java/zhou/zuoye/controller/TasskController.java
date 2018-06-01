@@ -38,11 +38,16 @@ public class TasskController {
 
     @PostMapping("/add")
     public String add(@RequestParam Integer cid, @RequestParam String files_links, @RequestParam String title, @RequestParam String content) {
-        Tassk tassk = new Tassk(courseService.findById(cid), title, content, files_links);
+        Tassk  tassk = new Tassk(courseService.findById(cid), title, content, files_links);
+        /*if (files_links.length() > 0) {
+            tassk = new Tassk(courseService.findById(cid), title, content, files_links);
+        } else {
+            tassk = new Tassk(courseService.findById(cid), title, content);
+        }*/
         System.out.println(cid);
         System.out.println(title);
         System.out.println(content);
-        System.out.println(files_links);
+        System.out.println(files_links.length());
         Tassk tassk1 = tasskService.save(tassk);
         if (tassk1 == null)
             return "发布失败";
