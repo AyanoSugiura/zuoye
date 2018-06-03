@@ -67,4 +67,9 @@ public class StudentCourseServiceImpl extends ServiceImpl<StudentCourse,Integer>
         return studentCourseRepository.deleteAllByStudentAndCourse(student, course);
     }
 
+    @Override
+    public Integer deleteAllByCourse(Course course) {
+        return studentCourseRepository.deleteAllByCourse(course);
+    }
+
 }

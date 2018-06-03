@@ -31,5 +31,10 @@ public interface StudentWorkRepository extends JpaRepository<StudentWork,Integer
     @Query(value = "DELETE student_work.* from student_work where sid=?1 and student_work.tsk_id in (select tassk.id from tassk where tassk.cid=?2)",nativeQuery=true)
     public Integer deleteAllByStudentAndCourse(Integer sid,Integer cid);
 
+    @Transient
+    @Modifying
+    @Query(value = "DELETE student_work.* from student_work where tsk_id in (select tassk.id from tassk where cid=?1)",nativeQuery=true)
+    public Integer deleteCourseStudentWorks(Integer cid);
+
 }
 

@@ -2,11 +2,11 @@ package zhou.zuoye.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="task_file")
+/*@Entity
+@Table(name="task_file")*/
 public class TaskFile {
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
@@ -39,5 +39,5 @@ public class TaskFile {
 
     public void setFile(ConFile file) {
         this.file = file;
-    }
+    }*/
 }

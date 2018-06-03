@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="course")
@@ -25,6 +26,13 @@ public class Course {
     private Integer verify=1;    //审核状态 0--未通过 1--待审核 2--已通过
     @Column(columnDefinition = "INTEGER DEFAULT 1")
     private Integer usable=1;    //可用状态 1--可用 0--不可用
+
+    @Transient
+    private Integer stuNum;
+    @Transient
+    private String recentTriTaskTitle  ;
+    @Transient
+    private Integer  recentTriTaskId ;
 
     public Integer getId() {
         return id;
@@ -87,6 +95,29 @@ public class Course {
     }
 
 
+    public Integer getStuNum() {
+        return stuNum;
+    }
+
+    public void setStuNum(Integer stuNum) {
+        this.stuNum = stuNum;
+    }
+
+    public String getRecentTriTaskTitle() {
+        return recentTriTaskTitle;
+    }
+
+    public void setRecentTriTaskTitle(String recentTriTaskTitle) {
+        this.recentTriTaskTitle = recentTriTaskTitle;
+    }
+
+    public Integer getRecentTriTaskId() {
+        return recentTriTaskId;
+    }
+
+    public void setRecentTriTaskId(Integer recentTriTaskId) {
+        this.recentTriTaskId = recentTriTaskId;
+    }
 
     public Course(User teacher) {
         this.teacher = teacher;

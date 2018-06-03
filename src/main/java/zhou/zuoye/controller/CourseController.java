@@ -2,9 +2,9 @@ package zhou.zuoye.controller;
 
 import org.springframework.web.bind.annotation.*;
 import zhou.zuoye.model.Course;
+import zhou.zuoye.model.Tassk;
 import zhou.zuoye.model.User;
-import zhou.zuoye.service.CourseService;
-import zhou.zuoye.service.UserService;
+import zhou.zuoye.service.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,6 +17,12 @@ public class CourseController {
     private CourseService courseService;
     @Resource
     private UserService userService;
+    @Resource
+    private TasskService tasskService;
+    @Resource
+    private StudentWorkService studentWorkService;
+    @Resource
+    private StudentCourseService studentCourseService;
 
 
     @PostMapping("/save")
@@ -43,10 +49,19 @@ public class CourseController {
     }
 
     @PostMapping("/tchcoursesbp")
-    public List<Course> teacherCourseByphone(@RequestParam String phone) {
-        User teacher = userService.findByPhone(phone);
+    public List<Course> teacherCourseByphone(@RequestParam Integer tid) {
+        User teacher = userService.findUserById(tid);
         if (teacher == null || teacher.getPhone() == null) return null;
         List<Course> courses = courseService.findCoursesByTeacher(teacher);
+        for (Course course : courses) {
+            System.out.println(course.getId());
+            course.setStuNum(courseService.CourseMemberTotal(course.getId()));
+            Tassk tassk = tasskService.courseRecentTriTask(course.getId());
+            if (tassk != null) {
+                course.setRecentTriTaskId(tassk.getId());
+                course.setRecentTriTaskTitle(tassk.getTitle());
+            }
+        }
         return courses;
     }
 
@@ -78,5 +93,19 @@ public class CourseController {
         Course course = courseService.findCourseById(cid);
         course.setSelectscr(selectscr);
         return courseService.save(course);
+    }
+
+    //重置或删除课程
+    @PostMapping("/refreshOrDeleteCourse")
+    public String refreshOrDeleteCourse(@RequestParam Integer cid, @RequestParam String psw, @RequestParam Integer rOrD) {
+        Course course = courseService.findCourseById(cid);
+        System.out.println(psw);
+        System.out.println(course.getTeacher().getPassword());
+        if(!(course.getTeacher().getPassword().equals(psw)))return "密码错误";
+        studentWorkService.deleteCourseStudentWorks(cid);
+        tasskService.deleteTassksByCourse(course);
+        studentCourseService.deleteAllByCourse(course);
+        if(rOrD==1)courseService.deleteById(cid);
+        return rOrD==1?"课程已经删除":(rOrD==2?"课程已经重置":"");
     }
 }

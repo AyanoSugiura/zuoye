@@ -2,10 +2,10 @@ package zhou.zuoye.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="confile")
+/*@Entity
+@Table(name="confile")*/
 public class ConFile {
-    @Id
+   /* @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
@@ -56,5 +56,5 @@ public class ConFile {
 
     public void setUsable(Integer usable) {
         this.usable = usable;
-    }
+    }*/
 }

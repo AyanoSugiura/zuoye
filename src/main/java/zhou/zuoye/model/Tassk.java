@@ -17,6 +17,8 @@ public class Tassk {
 
     @Column(nullable = false)
     private String title;
+
+
     private String content;
 
     private String files_links;

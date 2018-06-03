@@ -24,6 +24,7 @@ public interface StudentCourseService extends Service<StudentCourse,Integer>{
     public List<StudentCourse> CourseMemberVerifyPages(Integer cid,Integer verify,Integer start,Integer page);
 
     public Integer deleteAllByStudentAndCourse(User student,Course course);
+    public  Integer deleteAllByCourse(Course course);
 
 }
 

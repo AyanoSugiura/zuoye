@@ -2,11 +2,11 @@ package zhou.zuoye.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="work_file")
+/*@Entity
+@Table(name="work_file")*/
 public class StudentWorkFile {
 
-    @Id
+ /*   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
@@ -50,7 +50,7 @@ public class StudentWorkFile {
 
     public void setIsPg(Integer isPg) {
         this.isPg = isPg;
-    }
+    }*/
 
 
 }

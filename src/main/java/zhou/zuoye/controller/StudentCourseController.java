@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import zhou.zuoye.model.Course;
 import zhou.zuoye.model.StudentCourse;
+import zhou.zuoye.model.Tassk;
 import zhou.zuoye.model.User;
 import zhou.zuoye.model.statistics.page.PageAndXk;
-import zhou.zuoye.service.CourseService;
-import zhou.zuoye.service.StudentCourseService;
-import zhou.zuoye.service.StudentWorkService;
-import zhou.zuoye.service.UserService;
+import zhou.zuoye.service.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -33,14 +31,23 @@ public class StudentCourseController {
     private StudentCourseService studentCourseService;
     @Resource
     private StudentWorkService studentWorkService;
+    @Resource
+    private TasskService tasskService;
 
     @PostMapping("/apply")
     public String apply(@RequestParam Integer sid, @RequestParam Integer cid) {
-        System.out.println("sid： " + sid + " cid: " + cid);
         User student = userService.findById(sid);
         Course course = courseService.findById(cid);
         StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(student, course);
-        if (studentCourse != null) return "你已经选了该门课";
+        if (studentCourse != null && (studentCourse.getVerify() == 1 || studentCourse.getVerify() == 2))
+            return "你已经选了该门课";
+        if (studentCourse != null && studentCourse.getVerify() == 0) {
+            studentCourse.setVerify(1);
+            StudentCourse sc = studentCourseService.save(studentCourse);
+            if (sc != null)
+                return "申请成功待审核";
+            else return "申请失败";
+        }
         StudentCourse studentCourse1 = new StudentCourse(student, course);
         StudentCourse studentCourse2 = studentCourseService.save(studentCourse1);
         if (studentCourse2 != null)
@@ -53,11 +60,11 @@ public class StudentCourseController {
     public PageAndXk verify(@RequestParam Integer sid, @RequestParam Integer cid, @RequestParam Integer tid, @RequestParam Integer start, @RequestParam Integer page, @RequestParam Integer rootVerify, @RequestParam Integer toVerify) {
         User student = new User(sid);
         Course course = courseService.findCourseById(cid);
-        if(course.getTeacher().getId()!=tid)return null;
+        if (course.getTeacher().getId() != tid) return null;
         StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(student, course);
         studentCourse.setVerify(toVerify);
         studentCourseService.save(studentCourse);
-        return new  PageAndXk(studentCourseService.CourseMemberVerifyPages(cid, rootVerify,start,page),studentCourseService.CourseMemberVerifyCount(cid,rootVerify));
+        return new PageAndXk(studentCourseService.CourseMemberVerifyPages(cid, rootVerify, start, page), studentCourseService.CourseMemberVerifyCount(cid, rootVerify));
     }
 
     //未审核
@@ -72,6 +79,14 @@ public class StudentCourseController {
     public List<StudentCourse> studentCourses(@RequestParam Integer sid) {
         User student = new User(sid);
         List<StudentCourse> studentcourses = studentCourseService.findStudentCoursesByStudentAndVerifyNotOrderByVerifyDesc(student, 0);
+        for (StudentCourse studentcourse : studentcourses) {
+            studentcourse.getCourse().setStuNum(courseService.CourseMemberTotal(studentcourse.getCourse().getId()));
+            Tassk tassk = tasskService.courseRecentTriTask(studentcourse.getCourse().getId());
+            if (tassk != null) {
+                studentcourse.getCourse().setRecentTriTaskId(tassk.getId());
+                studentcourse.getCourse().setRecentTriTaskTitle(tassk.getTitle());
+            }
+        }
         return studentcourses;
     }
 
@@ -81,16 +96,17 @@ public class StudentCourseController {
         Course course = courseService.findCourseById(cid);
         if (course == null) return "课号错误,请检查";
         StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(student, course);
-        if (studentCourse != null) return "你已经选了该门课";
+        if (studentCourse != null && (studentCourse.getVerify() == 1 || studentCourse.getVerify() == 2))
+            return "你已经选了该门课";
         else return "你未选该门课";
     }
 
     //成员界面用
     @PostMapping("/member")
-    public PageAndXk courseMember(@RequestParam Integer tid, @RequestParam Integer cid, @RequestParam Integer verify,@RequestParam Integer start,@RequestParam Integer page) {
+    public PageAndXk courseMember(@RequestParam Integer tid, @RequestParam Integer cid, @RequestParam Integer verify, @RequestParam Integer start, @RequestParam Integer page) {
         Course course = courseService.findCourseById(cid);
-        if(course.getTeacher().getId()!=tid)return null;
-        PageAndXk pageAndXk=new  PageAndXk(studentCourseService.CourseMemberVerifyPages(cid, verify,start,page),studentCourseService.CourseMemberVerifyCount(cid,verify));
+        //if(course.getTeacher().getId()!=tid)return null;
+        PageAndXk pageAndXk = new PageAndXk(studentCourseService.CourseMemberVerifyPages(cid, verify, start, page), studentCourseService.CourseMemberVerifyCount(cid, verify));
 
         return pageAndXk;
     }
@@ -105,26 +121,27 @@ public class StudentCourseController {
                             @RequestParam Integer rootVerify) {
         System.out.println(start);
         Course course = courseService.findCourseById(cid);
-        if(course.getTeacher().getId()!=tid)return null;
-        User student =new User(sid);
-        studentCourseService.deleteAllByStudentAndCourse(student,course);
-        studentWorkService.deleteAllByStudentAndCourse(sid,cid);
-        PageAndXk pageAndXk=new  PageAndXk(studentCourseService.CourseMemberVerifyPages(cid, rootVerify,start,page),studentCourseService.CourseMemberVerifyCount(cid,rootVerify));
+        if (course.getTeacher().getId() != tid) return null;
+        User student = new User(sid);
+        studentCourseService.deleteAllByStudentAndCourse(student, course);
+        studentWorkService.deleteAllByStudentAndCourse(sid, cid);
+        PageAndXk pageAndXk = new PageAndXk(studentCourseService.CourseMemberVerifyPages(cid, rootVerify, start, page), studentCourseService.CourseMemberVerifyCount(cid, rootVerify));
         return pageAndXk;
     }
 
     //成员界面用 查看学生密码
     @PostMapping("/tchSeeStuPsw")
-    public String tchSeeStuPsw(@RequestParam Integer tid, @RequestParam Integer sid,@RequestParam Integer cid) {
+    public String tchSeeStuPsw(@RequestParam Integer tid, @RequestParam Integer sid, @RequestParam Integer cid) {
         User student = userService.findUserById(sid);
-        StudentCourse studentCourse= studentCourseService.findByStudentAndCourse(new User(sid),new Course(cid));
-        if(studentCourse==null||studentCourse.getCourse().getTeacher().getId()!=tid||studentCourse.getCourse().getTeacher()==null) return  null;
+        StudentCourse studentCourse = studentCourseService.findByStudentAndCourse(new User(sid), new Course(cid));
+        if (studentCourse == null || studentCourse.getCourse().getTeacher().getId() != tid || studentCourse.getCourse().getTeacher() == null)
+            return null;
         return student.getPassword();
     }
 
     //成员界面用 excel增加成员用
     @PostMapping("/exceladdmember")
-    public PageAndXk excelAddMember( @RequestParam("cid") Integer cid, @RequestParam("tid") Integer tid,@RequestParam Integer start,@RequestParam Integer page,@RequestParam("file") MultipartFile file) throws IOException {
+    public PageAndXk excelAddMember(@RequestParam("cid") Integer cid, @RequestParam("tid") Integer tid, @RequestParam Integer start, @RequestParam Integer page, @RequestParam("file") MultipartFile file) throws IOException {
         System.out.println(file.getOriginalFilename());
         System.out.println(cid);
 
@@ -149,19 +166,24 @@ public class StudentCourseController {
 
                 student = userService.findByPhone(phone);
                 if (student == null) {
-                    student = new User(name, "123456", phone,1);
+                    student = new User(name, "123456", phone, 1);
                     student = userService.save(student);
-                }
-                if (studentCourseService.findByStudentAndCourse(student, course) == null) {
-                    studentCourse = new StudentCourse(student, course, 1);
-                    studentCourseService.save(studentCourse);
+                    studentCourseService.save(new  StudentCourse(student,course,2));
+                } else {
+                    StudentCourse sc = studentCourseService.findByStudentAndCourse(student, course);
+                    if (sc == null) {
+                        studentCourse = new StudentCourse(student, course, 2);
+                        studentCourseService.save(studentCourse);
+                    }else if (sc.getVerify() == 0 || sc.getVerify() == 1) {
+                        sc.setVerify(2);
+                    }
                 }
             }
         } else if (flieType.equals(".xls")) {
 
         }
 
-        return courseMember(tid, cid, 2,start,page);
+        return courseMember(tid, cid, 2, start, page);
     }
     /*@PostMapping("/stucourses2")
     public List<StudentCourse> studentCourses2(@RequestParam Integer sid) {

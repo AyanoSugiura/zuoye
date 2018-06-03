@@ -26,4 +26,5 @@ public interface StudentCourseRepository extends JpaRepository<StudentCourse,Int
 
 
     public Integer deleteAllByStudentAndCourse(User student,Course course);
+    public  Integer deleteAllByCourse(Course course);
 }

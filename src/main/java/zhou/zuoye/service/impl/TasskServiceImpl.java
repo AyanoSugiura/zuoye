@@ -37,6 +37,16 @@ public class TasskServiceImpl extends ServiceImpl<Tassk,Integer> implements Tass
     }
 
     @Override
+    public Tassk courseRecentTriTask(Integer cid){
+        return tasskRepository.courseRecentTriTask(cid);
+    }
+
+    @Override
+    public Integer deleteTassksByCourse(Course course) {
+        return tasskRepository.deleteTassksByCourse(course);
+    }
+
+    @Override
     public List<Tassk> findTassksByCourseOrderByIdAsc(Course course){
         return tasskRepository.findTassksByCourseOrderByIdAsc(course);
     }

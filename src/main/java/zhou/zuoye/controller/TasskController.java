@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,11 @@ public class TasskController {
         return tassks;
     }
 
+    @PostMapping("/taskTitle")
+    public String taskTitle(@RequestParam Integer task_id) {
+        return tasskService.findTasskById(task_id).getTitle();
+    }
+
     @PostMapping("/stutasks")
     public String studentTasks(@RequestParam Integer tasskId, @RequestParam Integer uid) {
         User student = new User(uid);
@@ -83,6 +89,7 @@ public class TasskController {
         TchStatistic tchStatistic;
         List<TchStatistic> tchStatistics = new ArrayList<>();
         List<StudentWork> studentWorks;
+        DecimalFormat df = new DecimalFormat("0.00");
         double stuAvrg = 0;
         List<Double> stuAvrgs = new ArrayList<>();
         String[] stdc = courseService.findCourseById(cid).getSelectscr().split("\\|");
@@ -104,7 +111,11 @@ public class TasskController {
         XSSFSheet sheet = workbook.createSheet();
 
         List<XSSFRow> rows = new ArrayList<>();
-        int i = 0;
+        XSSFRow rowOne = sheet.createRow(0);
+        rowOne.createCell(0).setCellValue("学号");
+        rowOne.createCell(1).setCellValue("姓名");;
+
+        int i = 1;
         int j = 2;
 
         for (StudentCourse studentCourse : studentCs) {
@@ -170,7 +181,7 @@ public class TasskController {
                 j = j + 1;
             }
             double stuav = stuAvrg / (tassks.size());
-
+            stuav=Double.parseDouble(df.format(stuav));
             stuAvrgs.add(stuav);
             stuAvrg = 0;
             tchStatistic = new TchStatistic(studentCourse.getStudent(), studentWorks, stuav);
@@ -187,6 +198,11 @@ public class TasskController {
                 lll = lll + 1;
             }
         }
+
+        for (int xvv=2;xvv<j;xvv++) {
+                rowOne.createCell(xvv).setCellValue(xvv-1);
+        }
+        rowOne.createCell(j).setCellValue("平时分");
 
 
         try {

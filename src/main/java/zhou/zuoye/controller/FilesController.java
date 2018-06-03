@@ -67,11 +67,12 @@ public class FilesController {
     @GetMapping("/getfiletopdf/{filename:.+}")
     public ResponseEntity getfiletopdf(@PathVariable String filename) throws Exception {
         String flieType = filename.substring(filename.lastIndexOf('.'));
-        String pdfFlieName=filename.substring(0,filename.lastIndexOf('.')+1)+"pdf";
-        String source="D:\\zhou1\\projects\\zuoyefiles\\" + filename;
-        String dest="D:\\zhou1\\projects\\zuoyefiles\\zydpdf\\"+pdfFlieName;
-        int type = (flieType == ".doc" || flieType == ".docx") ? 0 : ((flieType == ".xls" || flieType == ".xlsx") ? 1 : 2);
-        PdfConverter.init(0,source,dest);
+        String pdfFlieName = filename.substring(0, filename.lastIndexOf('.') + 1) + "pdf";
+        String source = "D:\\zhou1\\projects\\zuoyefiles\\" + filename;
+        String dest = "D:\\zhou1\\projects\\zuoyefiles\\zydpdf\\" + pdfFlieName;
+        System.out.println(flieType);
+        int type = (flieType.equals(".doc") || flieType.equals(".docx")) ? 0 : ((flieType.equals(".xls") || flieType.equals(".xlsx")) ? 1 : 2);
+        PdfConverter.init(type, source, dest);
         PdfConverter.converter();
         File file = new File(dest);
         HttpHeaders headers = new HttpHeaders();

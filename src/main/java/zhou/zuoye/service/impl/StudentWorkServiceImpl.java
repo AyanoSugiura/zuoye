@@ -61,4 +61,9 @@ public class StudentWorkServiceImpl extends ServiceImpl<StudentWork,Integer> imp
     public Integer deleteAllByStudentAndCourse(Integer sid, Integer cid) {
         return studentWorkRepository.deleteAllByStudentAndCourse(sid,cid);
     }
+
+    @Override
+    public Integer deleteCourseStudentWorks(Integer cid) {
+        return studentWorkRepository.deleteCourseStudentWorks(cid);
+    }
 }

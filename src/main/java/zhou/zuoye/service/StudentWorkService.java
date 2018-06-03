@@ -23,4 +23,6 @@ public interface StudentWorkService  extends Service<StudentWork,Integer>{
 
     public Integer deleteAllByStudentAndCourse(Integer sid,Integer cid);
 
+    public Integer deleteCourseStudentWorks(Integer cid);
+
 }

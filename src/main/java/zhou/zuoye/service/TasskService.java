@@ -13,4 +13,9 @@ public interface TasskService  extends Service<Tassk,Integer>{
     public List<Tassk> findTassksByCourseOrderByIdDesc(Course course);
     public List<Tassk> findTassksByCourseOrderByIdAsc(Course course);
     public Tassk findTasskById(Integer id);
+
+    public Tassk courseRecentTriTask(Integer cid);
+    public Integer deleteTassksByCourse(Course course);
+
+
 }
