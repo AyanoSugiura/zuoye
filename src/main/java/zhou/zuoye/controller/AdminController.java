@@ -43,4 +43,17 @@ public class AdminController {
         userService.save(tch);
         return new PageAndUsers(userService.tchVerifyStatusPages(rootVerify, start, page),userService.tchVerifyStatusCount(rootVerify));
     }
+
+    @PostMapping("/usersPage")
+    public PageAndUsers usersPage(@RequestParam Integer aid, @RequestParam Integer start, @RequestParam Integer page) {
+        if (userService.findUserById(aid).getUserlevel() != 2) return null;
+        return new PageAndUsers(userService.userVerifyStatusPages(start, page),userService.userVerifyStatusCount());
+    }
+
+    //成员界面用 查看学生密码
+    @PostMapping("/seePsw")
+    public String tchSeeStuPsw(@RequestParam Integer aid, @RequestParam Integer uid) {
+        if (userService.findUserById(aid).getUserlevel() != 2) return null;
+        return  userService.findUserById(uid).getPassword();
+    }
 }

@@ -40,5 +40,15 @@ public class UserServiceImpl extends ServiceImpl<User,Integer> implements UserSe
         return userRepository.tchVerifyStatusPages(verify, start, page);
     }
 
+    @Override
+    public Integer userVerifyStatusCount() {
+        return userRepository.userVerifyStatusCount();
+    }
+
+    @Override
+    public List<User> userVerifyStatusPages( Integer start, Integer page) {
+        return userRepository.userVerifyStatusPages( start, page);
+    }
+
 
 }

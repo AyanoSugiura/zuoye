@@ -19,4 +19,10 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     @Query(value = "SELECT * FROM user WHERE userlevel=1 AND verify=?1 AND usable=1 LIMIT ?2,?3" ,nativeQuery=true)
     public List<User> tchVerifyStatusPages(Integer verify,Integer start,Integer page);
+
+
+    @Query(value = "SELECT COUNT(*) FROM user" ,nativeQuery=true)
+    public Integer userVerifyStatusCount();
+    @Query(value = "SELECT * FROM user LIMIT ?1,?2" ,nativeQuery=true)
+    public List<User> userVerifyStatusPages(Integer start,Integer page);
 }
