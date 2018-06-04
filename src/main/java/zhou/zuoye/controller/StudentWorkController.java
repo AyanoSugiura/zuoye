@@ -175,7 +175,7 @@ public class StudentWorkController {
     }
 
 
-    //应放在Task控制的。妥协处理
+
     @PostMapping("/taskalter")
     public Tassk alter(@RequestParam Integer cid, @RequestParam Integer id, @RequestParam String title, @RequestParam String content, @RequestParam String files_links) {
         Tassk tassk = tasskService.findTasskById(id);
@@ -186,7 +186,15 @@ public class StudentWorkController {
         rtTassk.setPgStatistics(pgStatisticss(tassk.getId(), cid));
         return rtTassk;
     }
-
+    @PostMapping("/killBack")
+    public Object  killBack(@RequestParam Integer tid, @RequestParam Integer id,@RequestParam Integer taskId ){
+        StudentWork studentWork=studentWorkService.findStudentWorkById(id);
+        if(studentWork.getTassk().getCourse().getTeacher().getId()!=tid){return "你没有权限打回该作业";}
+        studentWork.setScore(null);
+        studentWork.setIsPg(0);
+        List<StudentWork> studentWorks = isPg(taskId, 1);
+        return studentWorks;
+    }
 
     private void sortZyListByCrsId(List<StudentWork> list) {
         Collections.sort(list, new Comparator<StudentWork>() {
